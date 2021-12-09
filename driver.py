@@ -5,5 +5,10 @@ text = "go forward 5 seconds, go left for 2 seconds, go right for 1 second, go b
 
 
 if __name__ == "__main__":
-    print(len(sys.argv))
-    print(sys.argv)
+    # print(len(sys.argv))
+    # print(sys.argv)
+    text = sys.argv[1]
+    if text.index("hello"):
+        print("yeah")
+    else:
+        print("i am sad")
