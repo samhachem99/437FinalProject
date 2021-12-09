@@ -8,7 +8,8 @@ if __name__ == "__main__":
     # print(len(sys.argv))
     # print(sys.argv)
     text = sys.argv[1]
-    if text.index("hello"):
+    try: 
+        text.index("hello")
         print("yeah")
-    else:
-        print("i am sad")
+    except:
+        print("i am sadski")
