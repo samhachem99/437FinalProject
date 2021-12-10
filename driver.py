@@ -60,7 +60,4 @@ def run_driver():
         time.sleep(0.5)
 
 if __name__ == "__main__":
-    # print(len(sys.argv))
-    # print(sys.argv)
-    # text = "go forward 5 seconds, go left for 2 seconds, go right for 1 second, go backward for 10 cms"
     run_driver()
