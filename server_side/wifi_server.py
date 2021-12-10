@@ -12,7 +12,7 @@ STOP = "STOP"
 SPEEDUP = "SPEEDUP"
 SPEEDDOWN = "SPEEDDOWN"
 UPDATE = "UPDATE"
-HOST = "10.0.0.255" # IP address of your Raspberry PI
+HOST = "192.168.1.147" # IP address of your Raspberry PI
 PORT = 65432          # Port to listen on (non-privileged ports are > 1023)
 power_val = 50
 distance_covered = 0.0
@@ -86,11 +86,13 @@ def send_feedback(data):
 
 def run_server():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        print("Connecting with Host {} and Port {}".format(HOST, PORT))
         try:
             s.bind((HOST, PORT))
             s.listen()
         except Exception as e:
             print("Closing Socket With Exception {}".format(e))
+        print("Connected Successfully....")
         print("Listening....")
         while 1:
             try:
