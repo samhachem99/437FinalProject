@@ -48,6 +48,7 @@ def get_file_data():
 def run_driver():
     global fd
     
+    print("Listening for file: {}".format(FILE_NAME))
     while True:
         fd = open(FILE_NAME, "r+")
         data = get_file_data()
