@@ -1,7 +1,15 @@
-import socket 
+import socket
+
+FROWARD = "FORWARD"
+BACKWARD = "BACKWARD"
+LEFT = "LEFT"
+RIGHT = "RIGHT"
+STOP = "STOP"
+SPEEDUP = "SPEEDUP"
+SPEEDDOWN = "SPEEDDOWN"
 
 CLIENT_HOST = "192.168.1.147" 
-CLIENT_PORT = 8000
+CLIENT_PORT = 65432
 BUFFER_SIZE = 4096
 
 client = None
@@ -14,22 +22,39 @@ def setup(host, port):
     client.connect((host,port))
     print("connected....")
     
-def process_message(message: str):
+def send_request(message: str):
     global client 
     
     client.send(message.encode())
-    data = str(client.recieve(BUFFER_SIZE).decode("utf-8"))
-    print("Client sent back this: {}".format(data))
+    print("Message Sent.....")
+    # data = str(client.recv(BUFFER_SIZE).decode("utf-8"))
+    # print("Client sent back this: {}".format(data))
+    
+def process_request(message: str):
+    if message == "w":
+        send_request(FROWARD)
+    elif message == "a":
+        send_request(LEFT)
+    elif message == "d":
+        send_request(RIGHT)
+    elif message == "s":
+        send_request(BACKWARD)
+    elif message == "=":
+        send_request(SPEEDUP)
+    elif message == "-":
+        send_request(SPEEDDOWN)
+    else:
+        send_request(STOP)
 
 if __name__ == "__main__":
-    host = input("Host IP Address: ")
-    port = int(input("Host Port: "))
-    setup(host, port)
+    setup(CLIENT_HOST, CLIENT_PORT)
     
     while True:
         user_text = input("what to send?\n")
-        if user_text == "q":
+        if user_text == "qq":
+            send_request(STOP)
             break
-        process_message(user_text)
+        process_request(user_text)
+    client.close()
     
 
