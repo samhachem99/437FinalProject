@@ -83,7 +83,6 @@ def send_feedback(data):
     }
     return json.dumps(ret_data)
 
-
 def run_server():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         print("Connecting with Host {} and Port {}".format(HOST, PORT))
