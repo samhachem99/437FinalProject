@@ -11,7 +11,7 @@ RIGHT = "RIGHT"
 STOP = "STOP"
 POWER = "POWER"
 COMMANDS_CONSTS = [FROWARD, BACKWARD, LEFT, RIGHT]
-FILE_NAME = "commands.txt" # "/home/pi/sirimessages/picommands.txt"
+FILE_NAME = "commands.txt"
 
 power_val = 50
 fd = None
