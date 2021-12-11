@@ -14,7 +14,7 @@ COMMANDS_CONSTS = [FROWARD, BACKWARD, LEFT, RIGHT, STOP, SPEED]
 SECONDS = "SECONDS"
 
 # File where the commands are saved after the parsing
-FILE_DESTINATION = "commands.txt"
+FILE_DESTINATION = "/home/pi/Desktop/437FinalProject/commands.txt"
 
 # Encoded keywords (keywords that will be put in the file)
 ENC_KEYWORD_POWER = "POWER"
