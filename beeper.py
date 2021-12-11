@@ -2,6 +2,7 @@ import picar_4wd as fc
 import RPi.GPIO as GPIO
 import time
 
+WARNING_ZERO_INTERVAL = 1
 WARNING_ONE_INTERVAL = 0.5 
 WARNING_TWO_INTERVAL = 0.25
 WARNING_THREE_INTERVAL = 0.13
@@ -40,7 +41,7 @@ def destroy():
 def launch():
     setup(buzzer_pin)
     try:
-        loop(WARNING_THREE_INTERVAL)
+        loop(WARNING_ONE_INTERVAL)
     except KeyboardInterrupt:
         destroy()
         
