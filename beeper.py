@@ -41,9 +41,6 @@ def loop():
     while buzzer_running:
         if running:
             beep(interval)
-        else:
-            print("off")
-            off()
     destroy()
         
 def destroy():
