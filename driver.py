@@ -32,7 +32,7 @@ def process_data(cmd: str, duration: float):
         time.sleep(duration)
         fc.stop()
     elif cmd == STOP:
-        fc.stop()
+        time.sleep(duration)
     elif cmd == POWER:
         power_val = duration*10
 
