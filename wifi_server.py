@@ -91,6 +91,8 @@ def motor_command():
         fc.turn_right(power=power_val)
     elif current_command == LEFT:
         fc.turn_left(power=power_val)
+    elif data == STOP:
+            fc.stop()
 
 def process_data(data=""):
     global power_val, current_command
@@ -100,8 +102,6 @@ def process_data(data=""):
             power_val = min(100, power_val+10)
         elif data == SPEEDDOWN:
             power_val = max(10, power_val-10)
-        elif data == STOP:
-            fc.stop()
         else:
             current_command = data
 
