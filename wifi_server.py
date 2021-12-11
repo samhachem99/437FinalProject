@@ -45,22 +45,23 @@ def speedometer_handler():
 def ultra_handler():
     global running, ultra_reading
     
+    i = 0
     while running:
         ultra_status = fc.get_distance_at(0)
         print("ultra reading: {}".format(ultra_status))
-        if 30 <= ultra_status < 40:
-            buzzer.beep_control(WARNING_ONE_INTERVAL)
-        elif 20 <= ultra_status < 30:
-            buzzer.beep_control(WARNING_TWO_INTERVAL)
-        elif 10 <= ultra_status < 20: 
-            buzzer.beep_control(WARNING_THREE_INTERVAL)
-        elif 0 <= ultra_status < 10:
-            buzzer.beep_control(buzzer.WARNING_FOUR_INTERVAL)
-        elif ultra_status >= 40 or ultra_status < 0:
-            buzzer.beep_control(WARNING_ONE_INTERVAL, active=0)
-        sleep(0.5)
-        fc.servo.set_angle(fc.max_angle)
-        sleep(0.5)
+        if i % 5:
+            if 30 <= ultra_status < 40:
+                buzzer.beep_control(WARNING_ONE_INTERVAL)
+            elif 20 <= ultra_status < 30:
+                buzzer.beep_control(WARNING_TWO_INTERVAL)
+            elif 10 <= ultra_status < 20: 
+                buzzer.beep_control(WARNING_THREE_INTERVAL)
+            elif 0 <= ultra_status < 10:
+                buzzer.beep_control(buzzer.WARNING_FOUR_INTERVAL)
+            elif ultra_status >= 40 or ultra_status < 0:
+                buzzer.beep_control(WARNING_ONE_INTERVAL, active=0)
+        i += 1
+        sleep(1)
         
 def motor_thread_handler():
     global running, current_command
