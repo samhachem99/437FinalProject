@@ -35,11 +35,11 @@ def beep(x):
     off()
     time.sleep(x)
     
-def loop(x):
-    global buzzer_running
+def loop():
+    global buzzer_running, interval
     
     while buzzer_running:
-        beep(x)
+        beep(interval)
     destroy()
         
 def destroy():
@@ -47,10 +47,8 @@ def destroy():
     GPIO.cleanup()
 
 def beep_thread_handler():
-    global interval
-    
     try:
-        loop(interval)
+        loop()
     except KeyboardInterrupt:
         destroy()
 
