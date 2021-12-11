@@ -56,7 +56,7 @@ def run_driver():
             commands_list = data.split('\n')
             for command in commands_list:
                 cmd_duration = command.strip().split(' ')
-                process_data(cmd_duration[0], float(cmd_duration[1]))
+                process_data(cmd_duration[0].upper(), float(cmd_duration[1]))
         fd.close()
         time.sleep(0.5)
 
