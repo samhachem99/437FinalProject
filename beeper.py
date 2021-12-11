@@ -39,6 +39,7 @@ def loop(x):
     
     while buzzer_running:
         beep(x)
+    destroy()
         
 def destroy():
     off()
