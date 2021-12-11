@@ -55,8 +55,11 @@ def run_driver():
         if data != None:
             commands_list = data.split('\n')
             for command in commands_list:
-                cmd_duration = command.strip().split(' ')
-                process_data(cmd_duration[0].upper(), float(cmd_duration[1]))
+                try: 
+                    cmd_duration = command.strip().split(' ')
+                    process_data(cmd_duration[0].upper(), float(cmd_duration[1]))
+                except:
+                    continue
         fd.close()
         time.sleep(0.5)
 
