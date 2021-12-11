@@ -62,15 +62,19 @@ def launch(intvl=WARNING_ZERO_INTERVAL):
 if __name__ == "__main__":
     setup(BUZZER_PIN_DEFAULT)
     launch()
-    user_text = input("off?\n")
-    if user_text.lower() == "1":
-        interval = WARNING_ONE_INTERVAL
-    elif user_text.lower() == "2":
-        interval = WARNING_TWO_INTERVAL
-    elif user_text.lower() == "3":
-        interval = WARNING_THREE_INTERVAL
-    else:
-        buzzer_running = False
+    while True:
+        user_text = input("off?\n")
+        if user_text.lower() == "0":
+            interval = WARNING_ZERO_INTERVAL
+        elif user_text.lower() == "1":
+            interval = WARNING_ONE_INTERVAL
+        elif user_text.lower() == "2":
+            interval = WARNING_TWO_INTERVAL
+        elif user_text.lower() == "3":
+            interval = WARNING_THREE_INTERVAL
+        else:
+            buzzer_running = False
+            break
         
 
     
