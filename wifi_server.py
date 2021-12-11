@@ -58,6 +58,7 @@ def ultra_handler():
             buzzer.beep_control(buzzer.WARNING_FOUR_INTERVAL)
         elif ultra_status >= 40 or ultra_status < 0:
             buzzer.beep_control(WARNING_ONE_INTERVAL, active=0)
+        fc.servo.set_angle(fc.max_angle)
         sleep(1)
         
 def motor_thread_handler():
