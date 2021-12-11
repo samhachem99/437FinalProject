@@ -14,18 +14,18 @@ class Pin(object):
         "D1":  18,
         "D2":  27,
         "D3":  22,
-        "D4":  23,
-        "D5":  24,
+        "D4":  23, # left front
+        "D5":  24, # right front
         "D6":  25,
         "D7":  4,
-        "D8":  5,
-        "D9":  6,
+        "D8":  5, # ultrasonic
+        "D9":  6, # ultrasonic
         "D10": 12,
-        "D11": 13,
+        "D11": 13, # left rear
         "D12": 19,
         "D13": 16,
         "D14": 26,
-        "D15": 20,
+        "D15": 20, # right rear
         "D16": 21,
         "SW":  19,
         "LED": 26,
