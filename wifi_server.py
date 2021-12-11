@@ -47,6 +47,7 @@ def ultra_handler():
     
     while running:
         ultra_status = fc.get_distance_at(0)
+        print("ultra reading: {}".format(ultra_status))
         if 20 <= ultra_status < 29:
             buzzer.beep_control(WARNING_ONE_INTERVAL)
         elif 10 <= ultra_status <= 20:
@@ -57,6 +58,7 @@ def ultra_handler():
             buzzer.beep_control(buzzer.WARNING_FOUR_INTERVAL)
         elif ultra_status >= 30 or ultra_status == -2:
             buzzer.beep_control(WARNING_ONE_INTERVAL, active=0)
+        sleep(0.5)
         
 def motor_thread_handler():
     global running
