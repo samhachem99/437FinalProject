@@ -65,12 +65,18 @@ def motor_thread_handler():
     
     while running:
         ultra_status = fc.get_distance_at(0)
-        if ultra_status > 5:
-            motor_command()
-        elif ultra_status <= 5 and current_command != FROWARD:
+        if current_command == FROWARD:
+            if ultra_status <= 5:
+                fc.stop()
+            else:
+                motor_command()
+        elif current_command == RIGHT or current_command == LEFT:
+            if ultra_status <= 5:
+                fc.backward()
+                sleep(0.5)
             motor_command()
         else:
-            fc.stop()
+            motor_command()
 
 def fire_up_thread():
     global speedometer, ultra, motor_thread
