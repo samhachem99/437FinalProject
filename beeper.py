@@ -1,5 +1,6 @@
 import picar_4wd as fc
 import RPi.GPIO as GPIO
+from threading import *
 import time
 
 WARNING_ZERO_INTERVAL = 1
@@ -11,6 +12,8 @@ BUZZER_PIN_DEFAULT = "D0"
 
 pin: fc.Pin = None
 buzzer_running = True
+
+user_thread: Thread = None
 
 def setup(pin_val):
     global pin
@@ -46,13 +49,18 @@ def launch(interval=WARNING_ONE_INTERVAL):
         loop(interval)
     except KeyboardInterrupt:
         destroy()
-
-if __name__ == "__main__":
-    setup(BUZZER_PIN_DEFAULT)
-    launch()
+        
+def user_thread_handler():
+    global buzzer_running
+    
     user_text = input("off?")
     if user_text.lower() == "y":
         buzzer_running = False
+
+if __name__ == "__main__":
+    setup(BUZZER_PIN_DEFAULT)
+    user_thread = Thread(target=user_thread_handler)
+    launch()
         
 
     
