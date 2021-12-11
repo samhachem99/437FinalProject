@@ -6,6 +6,7 @@ import time
 WARNING_ONE_INTERVAL = 0.5 
 WARNING_TWO_INTERVAL = 0.25
 WARNING_THREE_INTERVAL = 0.13
+WARNING_FOUR_INTERVAL = 0.0
 
 BUZZER_PIN_DEFAULT = "D0"
 
@@ -31,9 +32,10 @@ def off():
     
 def beep(x):
     on()
-    time.sleep(x)
-    off()
-    time.sleep(x)
+    if x != 0.0:
+        time.sleep(x)
+        off()
+        time.sleep(x)
     
 def loop():
     global buzzer_running, interval, running
@@ -90,6 +92,8 @@ if __name__ == "__main__":
             beep_control(WARNING_TWO_INTERVAL)
         elif user_text.lower() == "3":
             beep_control(WARNING_THREE_INTERVAL)
+        elif user_text.lower() == "4":
+            beep_control(WARNING_FOUR_INTERVAL)
         elif user_text.lower() == "u":
             beep_control(WARNING_ONE_INTERVAL, active=0)
         else:
