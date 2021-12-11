@@ -64,17 +64,22 @@ if __name__ == "__main__":
     launch()
     while True:
         user_text = input("off?\n")
-        if user_text.lower() == "0":
-            interval = WARNING_ZERO_INTERVAL
-        elif user_text.lower() == "1":
-            interval = WARNING_ONE_INTERVAL
-        elif user_text.lower() == "2":
-            interval = WARNING_TWO_INTERVAL
-        elif user_text.lower() == "3":
-            interval = WARNING_THREE_INTERVAL
-        else:
+        try:
+            interval = 1.0/float(user_text)
+        except:
             buzzer_running = False
             break
+        # if user_text.lower() == "0":
+        #     interval = WARNING_ZERO_INTERVAL
+        # elif user_text.lower() == "1":
+        #     interval = WARNING_ONE_INTERVAL
+        # elif user_text.lower() == "2":
+        #     interval = WARNING_TWO_INTERVAL
+        # elif user_text.lower() == "3":
+        #     interval = WARNING_THREE_INTERVAL
+        # else:
+        #     buzzer_running = False
+        #     break
         
 
     
