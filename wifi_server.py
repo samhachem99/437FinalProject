@@ -1,8 +1,10 @@
 import socket
+from beeper_test import WARNING_THREE_INTERVAL, WARNING_TWO_INTERVAL
 import picar_4wd as fc
 import json
 from time import *
 from threading import *
+import beeper as buzzer
 
 FROWARD = "FORWARD"
 BACKWARD = "BACKWARD"
@@ -20,7 +22,9 @@ speed_cumlative = 0.0
 speed_num = 0
 avg_speed = 0.0
 running = 1
+ultra_reading = 100
 speedometer: Thread = None
+ultra: Thread = None
 
 def speedometer_handler():
     global speed_num
@@ -34,13 +38,37 @@ def speedometer_handler():
         sleep(1)
         current_speed = fc.speed_val()
         distance_covered += ((first_speed + current_speed)/2) * 1
+        
+def ultra_handler():
+    global ultra_reading
+    
+    while running:
+        ultra_status = fc.get_distance_at(0)
+        print("Ultrasonic Sensor reading: {}".format(ultra_status))
+        if 35 <= ultra_status <= 50:
+            if buzzer.running == 0:
+                buzzer.beep_launch()
+        elif 10 <= ultra_status <= 35:
+            if buzzer.running == 0:
+                buzzer.beep_launch(WARNING_TWO_INTERVAL)
+            else: 
+                buzzer.interval = WARNING_TWO_INTERVAL
+        elif 0 <= ultra_status <= 10: 
+            if buzzer.running == 0:
+                buzzer.beep_launch(WARNING_THREE_INTERVAL)
+            else: 
+                buzzer.interval = WARNING_THREE_INTERVAL
+        sleep(0.5)
 
 def fire_up_thread():
-    global speedometer
+    global speedometer, ultra
 
     fc.start_speed_thread()
     speedometer = Thread(target=speedometer_handler)
+    ultra = Thread(target=ultra_handler)
+    
     speedometer.start()
+    ultra.start()
 
 def process_data(data=""):
     global power_val
@@ -108,13 +136,19 @@ def run_server():
 
 def stop_thread():
     global running 
-
+    
     fc.left_rear_speed.deinit()
     fc.right_rear_speed.deinit()
     speedometer.join()
+    ultra.join()
+    
+    buzzer.beep_turn_off()
     running = 0
 
 if __name__ == "__main__":
+    buzzer.beep_setup()
     fire_up_thread()
-    run_server()
-    stop_thread()
+    try:
+        run_server()
+    except KeyboardInterrupt:
+        stop_thread()

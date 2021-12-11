@@ -3,16 +3,16 @@ import RPi.GPIO as GPIO
 from threading import *
 import time
 
-WARNING_ZERO_INTERVAL = 1
 WARNING_ONE_INTERVAL = 0.5 
 WARNING_TWO_INTERVAL = 0.25
 WARNING_THREE_INTERVAL = 0.13
 
 BUZZER_PIN_DEFAULT = "D0"
 
+running = 0
 pin: fc.Pin = None
 buzzer_running = True
-interval = WARNING_ZERO_INTERVAL
+interval = WARNING_ONE_INTERVAL
 
 beep_thread: Thread = None
 
@@ -52,12 +52,21 @@ def beep_thread_handler():
     except KeyboardInterrupt:
         destroy()
 
-def beep_launch(intvl=WARNING_ZERO_INTERVAL):
-    global beep_thread, interval
+def beep_launch(intvl=WARNING_ONE_INTERVAL):
+    global beep_thread, interval, running
     
     interval = intvl
+    running = 1
     beep_thread = Thread(target=beep_thread_handler)
     beep_thread.start()
+    
+def beep_turn_off():
+    global beep_thread, interval, buzzer_running, running
+    
+    buzzer_running = False
+    beep_thread.join()
+    running = 0
+    interval = WARNING_ONE_INTERVAL
     
 def beep_setup(pin=BUZZER_PIN_DEFAULT):
     setup(pin)
@@ -67,22 +76,13 @@ if __name__ == "__main__":
     beep_launch()
     while True:
         user_text = input("off?\n")
-        try:
-            interval = 1.0/float(user_text)
-        except:
-            buzzer_running = False
+        if user_text.lower() == "1":
+            interval = WARNING_ONE_INTERVAL
+        elif user_text.lower() == "2":
+            interval = WARNING_TWO_INTERVAL
+        elif user_text.lower() == "3":
+            interval = WARNING_THREE_INTERVAL
+        else:
+            beep_turn_off()
             break
-        # if user_text.lower() == "0":
-        #     interval = WARNING_ZERO_INTERVAL
-        # elif user_text.lower() == "1":
-        #     interval = WARNING_ONE_INTERVAL
-        # elif user_text.lower() == "2":
-        #     interval = WARNING_TWO_INTERVAL
-        # elif user_text.lower() == "3":
-        #     interval = WARNING_THREE_INTERVAL
-        # else:
-        #     buzzer_running = False
-        #     break
-        
-
     
