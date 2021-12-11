@@ -16,6 +16,7 @@ SPEEDDOWN = "SPEEDDOWN"
 UPDATE = "UPDATE"
 HOST = "192.168.1.147" # IP address of your Raspberry PI
 PORT = 65432          # Port to listen on (non-privileged ports are > 1023)
+current_command = STOP
 power_val = 50
 distance_covered = 0.0
 speed_cumlative = 0.0
@@ -23,8 +24,10 @@ speed_num = 0
 avg_speed = 0.0
 running = 1
 ultra_reading = 100
+
 speedometer: Thread = None
 ultra: Thread = None
+motor_thread: Thread = None
 
 def speedometer_handler():
     global speed_num
@@ -40,7 +43,7 @@ def speedometer_handler():
         distance_covered += ((first_speed + current_speed)/2) * 1
 
 def ultra_handler():
-    global ultra_reading
+    global running, ultra_reading
     
     while running:
         ultra_status = fc.get_distance_at(0)
@@ -54,36 +57,53 @@ def ultra_handler():
             buzzer.beep_control(buzzer.WARNING_FOUR_INTERVAL)
         elif ultra_status >= 30 or ultra_status == -2:
             buzzer.beep_control(WARNING_ONE_INTERVAL, active=0)
-        sleep(0.5)
+        
+def motor_thread_handler():
+    global running
+    
+    while running: 
+        ultra_status = fc.get_distance_at(0)
+        if ultra_status > 5:
+            motor_command()
+        else:
+            fc.stop()
 
 def fire_up_thread():
-    global speedometer, ultra
+    global speedometer, ultra, motor_thread
 
     fc.start_speed_thread()
     speedometer = Thread(target=speedometer_handler)
     ultra = Thread(target=ultra_handler)
+    motor_thread = Thread(target=motor_thread_handler)
     
     speedometer.start()
     ultra.start()
+    motor_thread.start()
+    
+def motor_command():
+    global power_val, current_command
+    
+    if current_command == FROWARD:
+        fc.forward(power=power_val)
+    elif current_command == BACKWARD:
+        fc.backward(power=power_val)
+    elif current_command == RIGHT:
+        fc.turn_right(power=power_val)
+    elif current_command == LEFT:
+        fc.turn_left(power=power_val)
 
 def process_data(data=""):
-    global power_val
+    global power_val, current_command
 
     if data != "":
-        if data == FROWARD:
-            fc.forward(power=power_val)
-        elif data == BACKWARD:
-            fc.backward(power=power_val)
-        elif data == RIGHT:
-            fc.turn_right(power=power_val)
-        elif data == LEFT:
-            fc.turn_left(power=power_val)
-        elif data == SPEEDUP:
+        if data == SPEEDUP:
             power_val = min(100, power_val+10)
         elif data == SPEEDDOWN:
             power_val = max(10, power_val-10)
         elif data == STOP:
             fc.stop()
+        else:
+            current_command = data
 
 def send_feedback(data):
     global power_val
