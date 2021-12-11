@@ -7,7 +7,7 @@ WARNING_ONE_INTERVAL = 0.5
 WARNING_TWO_INTERVAL = 0.25
 WARNING_THREE_INTERVAL = 0.13
 
-buzzer_pin = "D0"
+BUZZER_PIN_DEFAULT = "D0"
 
 pin: fc.Pin = None
 buzzer_running = True
@@ -41,14 +41,14 @@ def destroy():
     off()
     GPIO.cleanup()
 
-def launch():
-    setup(buzzer_pin)
+def launch(interval=WARNING_ONE_INTERVAL):
     try:
-        loop(WARNING_ONE_INTERVAL)
+        loop(interval)
     except KeyboardInterrupt:
         destroy()
-        
+
 if __name__ == "__main__":
+    setup(BUZZER_PIN_DEFAULT)
     launch()
     user_text = input("off?")
     if user_text.lower() == "y":
