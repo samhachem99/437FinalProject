@@ -1,5 +1,7 @@
 import os
 import sys
+import time
+import picar_4wd as fc
 
 # commands acceptable
 FROWARD = "FORWARD"
@@ -7,25 +9,59 @@ BACKWARD = "BACKWARD"
 LEFT = "LEFT"
 RIGHT = "RIGHT"
 STOP = "STOP"
-SPEEDUP = "SPEEDUP"
-SPEEDDOWN = "SPEEDDOWN"
-COMMANDS_CONSTS = [FROWARD, BACKWARD, LEFT, RIGHT, STOP, SPEEDUP, SPEEDDOWN]
+POWER = "POWER"
+COMMANDS_CONSTS = [FROWARD, BACKWARD, LEFT, RIGHT]
+FILE_NAME = "commands.txt"
 
-# units acceptable
-SECONDS = "SECONDS"
+power_val = 50
+fd = None
+
+def process_data(cmd: str, duration: float):
+    global power_val
+    
+    print("processing: {} for {}".format(cmd, duration))
+    if cmd in COMMANDS_CONSTS:
+        if cmd == FROWARD:
+            fc.forward(power=power_val)
+        elif cmd == BACKWARD:
+            fc.backward(power=power_val)
+        elif cmd == RIGHT:
+            fc.turn_right(power=power_val)
+        elif cmd == LEFT:
+            fc.turn_left(power=power_val)
+        time.sleep(duration)
+        fc.stop()
+    elif cmd == STOP:
+        fc.stop()
+    elif cmd == POWER:
+        power_val = duration*10
+
+def get_file_data():
+    global fd
+    
+    if os.path.getsize(filename=FILE_NAME) == 0:
+        return None
+    data = fd.read()
+    fd.truncate(0)
+    return data
+       
+def run_driver():
+    global fd
+    
+    print("Listening for file: {}".format(FILE_NAME))
+    while True:
+        fd = open(FILE_NAME, "r+")
+        data = get_file_data()
+        if data != None:
+            commands_list = data.split('\n')
+            for command in commands_list:
+                try: 
+                    cmd_duration = command.strip().split(' ')
+                    process_data(cmd_duration[0].upper(), float(cmd_duration[1]))
+                except:
+                    continue
+        fd.close()
+        time.sleep(0.5)
 
 if __name__ == "__main__":
-    # print(len(sys.argv))
-    # print(sys.argv)
-    # text = "go forward 5 seconds, go left for 2 seconds, go right for 1 second, go backward for 10 cms"
-    # text = sys.argv[1]
-    # retval = process_text()
-    # try:
-    #     text.index("hello")
-    #     print("yeah")
-    # except:
-    #     print("i am sadski")
-    text = input("what do you want to write?\n")
-    print(text)
-    if text == 87:
-        print("it is w")
+    run_driver()
