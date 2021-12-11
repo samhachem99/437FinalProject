@@ -33,6 +33,6 @@ def destroy():
 if __name__ == "__main__":
     setup(buzzer)
     try:
-        loop()
+        loop(0.5)
     except KeyboardInterrupt:
         destroy()
