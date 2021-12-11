@@ -41,8 +41,6 @@ def loop():
     while buzzer_running:
         if running:
             beep(interval)
-        else:
-            off()
     destroy()
         
 def destroy():
@@ -85,11 +83,13 @@ if __name__ == "__main__":
     while True:
         user_text = input("off?\n")
         if user_text.lower() == "1":
-            interval = WARNING_ONE_INTERVAL
+            beep_control(WARNING_ONE_INTERVAL)
         elif user_text.lower() == "2":
-            interval = WARNING_TWO_INTERVAL
+            beep_control(WARNING_TWO_INTERVAL)
         elif user_text.lower() == "3":
-            interval = WARNING_THREE_INTERVAL
+            beep_control(WARNING_THREE_INTERVAL)
+        elif user_text.lower() == "u":
+            beep_control(WARNING_ONE_INTERVAL, active=0)
         else:
             destroy()
             break
