@@ -61,11 +61,13 @@ def ultra_handler():
         sleep(0.5)
         
 def motor_thread_handler():
-    global running
+    global running, current_command
     
-    while running: 
+    while running:
         ultra_status = fc.get_distance_at(0)
         if ultra_status > 5:
+            motor_command()
+        elif ultra_status <= 5 and current_command != FROWARD:
             motor_command()
         else:
             fc.stop()
