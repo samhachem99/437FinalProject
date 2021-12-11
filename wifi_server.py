@@ -45,9 +45,9 @@ def ultra_handler():
     while running:
         ultra_status = fc.get_distance_at(0)
         print("Ultrasonic Sensor reading: {}".format(ultra_status))
-        if 35 <= ultra_status <= 50:
+        if 20 <= ultra_status <= 30:
             buzzer.beep_control(WARNING_ONE_INTERVAL)
-        elif 10 <= ultra_status <= 35:
+        elif 10 <= ultra_status <= 20:
             buzzer.beep_control(WARNING_TWO_INTERVAL)
         elif 0 <= ultra_status <= 10: 
             buzzer.beep_control(WARNING_THREE_INTERVAL)
@@ -129,16 +129,17 @@ def run_server():
                 print(e)
         client.close()
         s.close()
+        buzzer.destroy()
 
 def stop_thread():
     global running 
+    buzzer.destroy()
     
     fc.left_rear_speed.deinit()
     fc.right_rear_speed.deinit()
     speedometer.join()
     ultra.join()
     
-    buzzer.destroy()
     running = 0
 
 if __name__ == "__main__":
