@@ -80,17 +80,20 @@ def beep_control(intvl, active=1):
 
 if __name__ == "__main__":
     beep_setup()
-    while True:
-        user_text = input("off?\n")
-        if user_text.lower() == "1":
-            beep_control(WARNING_ONE_INTERVAL)
-        elif user_text.lower() == "2":
-            beep_control(WARNING_TWO_INTERVAL)
-        elif user_text.lower() == "3":
-            beep_control(WARNING_THREE_INTERVAL)
-        elif user_text.lower() == "u":
-            beep_control(WARNING_ONE_INTERVAL, active=0)
-        else:
-            destroy()
-            break
+    off()
+    time.sleep(1)
+    destroy()
+    # while True:
+    #     user_text = input("off?\n")
+    #     if user_text.lower() == "1":
+    #         beep_control(WARNING_ONE_INTERVAL)
+    #     elif user_text.lower() == "2":
+    #         beep_control(WARNING_TWO_INTERVAL)
+    #     elif user_text.lower() == "3":
+    #         beep_control(WARNING_THREE_INTERVAL)
+    #     elif user_text.lower() == "u":
+    #         beep_control(WARNING_ONE_INTERVAL, active=0)
+    #     else:
+    #         destroy()
+    #         break
     
