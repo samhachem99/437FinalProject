@@ -26,6 +26,7 @@ ENC_KEYWORD_STOP = "STOP"
 
 # Language definitions
 # Language is all lowercase
+LANG_KEYWORD_SEPARATOR_SYNONYMS = ['comma', 'then', 'than', 'after that', 'next', 'followed by']
 LANG_KEYWORD_SEPARATOR = ","
 
 # Different synonyms for the same direction
@@ -72,6 +73,8 @@ class Validation():
         self.encoded_commands = []
 
         # Splits the dictation into separate commands
+        for separator_synonym in LANG_KEYWORD_SEPARATOR_SYNONYMS:
+            text = text.replace(separator_synonym, LANG_KEYWORD_SEPARATOR)
         command_strings = text.upper().split(LANG_KEYWORD_SEPARATOR)
 
         # converts each command string into a list of keywords and stores it into
