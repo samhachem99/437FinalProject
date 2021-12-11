@@ -23,11 +23,11 @@ def setup(pin_val):
     
 def on():
     global pin
-    pin.value(GPIO.LOW)
+    pin.value(GPIO.HIGH)
     
 def off():
     global pin
-    pin.value(GPIO.HIGH)
+    pin.value(GPIO.LOW)
     
 def beep(x):
     on()
@@ -41,6 +41,8 @@ def loop():
     while buzzer_running:
         if running:
             beep(interval)
+        else:
+            off()
     destroy()
         
 def destroy():
@@ -80,20 +82,17 @@ def beep_control(intvl, active=1):
 
 if __name__ == "__main__":
     beep_setup()
-    on()
-    time.sleep(1)
-    destroy()
-    # while True:
-    #     user_text = input("off?\n")
-    #     if user_text.lower() == "1":
-    #         beep_control(WARNING_ONE_INTERVAL)
-    #     elif user_text.lower() == "2":
-    #         beep_control(WARNING_TWO_INTERVAL)
-    #     elif user_text.lower() == "3":
-    #         beep_control(WARNING_THREE_INTERVAL)
-    #     elif user_text.lower() == "u":
-    #         beep_control(WARNING_ONE_INTERVAL, active=0)
-    #     else:
-    #         destroy()
-    #         break
+    while True:
+        user_text = input("off?\n")
+        if user_text.lower() == "1":
+            beep_control(WARNING_ONE_INTERVAL)
+        elif user_text.lower() == "2":
+            beep_control(WARNING_TWO_INTERVAL)
+        elif user_text.lower() == "3":
+            beep_control(WARNING_THREE_INTERVAL)
+        elif user_text.lower() == "u":
+            beep_control(WARNING_ONE_INTERVAL, active=0)
+        else:
+            destroy()
+            break
     
