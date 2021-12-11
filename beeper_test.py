@@ -28,7 +28,8 @@ def loop(x):
         beep(x)
         
 def destroy():
-    GPIO.output(buzzerPin, GPIO.HIGH) 
+    off()
+    GPIO.cleanup()
     
 if __name__ == "__main__":
     setup(buzzer)
