@@ -58,7 +58,7 @@ def ultra_handler():
             buzzer.beep_control(buzzer.WARNING_FOUR_INTERVAL)
         elif ultra_status >= 30 or ultra_status < 0:
             buzzer.beep_control(WARNING_ONE_INTERVAL, active=0)
-        sleep(0.5)
+        # sleep(0.5)
         
 def motor_thread_handler():
     global running, current_command
