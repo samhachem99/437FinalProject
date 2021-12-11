@@ -42,6 +42,7 @@ def loop():
         if running:
             beep(interval)
         else:
+            print("off")
             off()
     destroy()
         
