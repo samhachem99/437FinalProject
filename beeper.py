@@ -52,19 +52,19 @@ def beep_thread_handler():
     except KeyboardInterrupt:
         destroy()
 
-def launch(intvl=WARNING_ZERO_INTERVAL):
+def beep_launch(intvl=WARNING_ZERO_INTERVAL):
     global beep_thread, interval
     
     interval = intvl
-    print("about to create thread")
     beep_thread = Thread(target=beep_thread_handler)
-    print("thread has been created")
     beep_thread.start()
-    print("thread has started")
+    
+def beep_setup(pin=BUZZER_PIN_DEFAULT):
+    setup(pin)
 
 if __name__ == "__main__":
-    setup(BUZZER_PIN_DEFAULT)
-    launch()
+    beep_setup()
+    beep_launch()
     while True:
         user_text = input("off?\n")
         try:
