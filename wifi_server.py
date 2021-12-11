@@ -91,7 +91,7 @@ def motor_command():
         fc.turn_right(power=power_val)
     elif current_command == LEFT:
         fc.turn_left(power=power_val)
-    elif data == STOP:
+    elif current_command == STOP:
             fc.stop()
 
 def process_data(data=""):
