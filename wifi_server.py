@@ -1,5 +1,5 @@
 import socket
-from beeper_test import WARNING_THREE_INTERVAL, WARNING_TWO_INTERVAL
+from beeper_test import WARNING_ONE_INTERVAL, WARNING_THREE_INTERVAL, WARNING_TWO_INTERVAL
 import picar_4wd as fc
 import json
 from time import *
@@ -46,18 +46,13 @@ def ultra_handler():
         ultra_status = fc.get_distance_at(0)
         print("Ultrasonic Sensor reading: {}".format(ultra_status))
         if 35 <= ultra_status <= 50:
-            if buzzer.running == 0:
-                buzzer.beep_launch()
+            buzzer.beep_control(WARNING_ONE_INTERVAL)
         elif 10 <= ultra_status <= 35:
-            if buzzer.running == 0:
-                buzzer.beep_launch(WARNING_TWO_INTERVAL)
-            else: 
-                buzzer.interval = WARNING_TWO_INTERVAL
+            buzzer.beep_control(WARNING_TWO_INTERVAL)
         elif 0 <= ultra_status <= 10: 
-            if buzzer.running == 0:
-                buzzer.beep_launch(WARNING_THREE_INTERVAL)
-            else: 
-                buzzer.interval = WARNING_THREE_INTERVAL
+            buzzer.beep_control(WARNING_THREE_INTERVAL)
+        elif ultra_status > 50 or ultra_status == -2:
+            buzzer.beep_control(WARNING_ONE_INTERVAL, active=0)
         sleep(0.5)
 
 def fire_up_thread():
@@ -142,13 +137,11 @@ def stop_thread():
     speedometer.join()
     ultra.join()
     
-    buzzer.beep_turn_off()
+    buzzer.destroy()
     running = 0
 
 if __name__ == "__main__":
     buzzer.beep_setup()
     fire_up_thread()
-    try:
-        run_server()
-    except KeyboardInterrupt:
-        stop_thread()
+    run_server()
+    stop_thread()

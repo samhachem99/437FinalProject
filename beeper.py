@@ -36,44 +36,50 @@ def beep(x):
     time.sleep(x)
     
 def loop():
-    global buzzer_running, interval
+    global buzzer_running, interval, running
     
     while buzzer_running:
-        beep(interval)
+        if running:
+            beep(interval)
     destroy()
         
 def destroy():
+    global beep_thread, interval, buzzer_running, running
+    
     off()
     GPIO.cleanup()
+    buzzer_running = False
+    beep_thread.join()
+    running = 0
+    interval = WARNING_ONE_INTERVAL
+    
 
 def beep_thread_handler():
     try:
         loop()
     except KeyboardInterrupt:
         destroy()
-
-def beep_launch(intvl=WARNING_ONE_INTERVAL):
+    
+def beep_setup(pin=BUZZER_PIN_DEFAULT, intvl=WARNING_ONE_INTERVAL):
     global beep_thread, interval, running
     
+    setup(pin)
     interval = intvl
-    running = 1
+    running = 0
     beep_thread = Thread(target=beep_thread_handler)
     beep_thread.start()
+
+def beep_control(intvl, active=1):
+    global interval, running
     
-def beep_turn_off():
-    global beep_thread, interval, buzzer_running, running
-    
-    buzzer_running = False
-    beep_thread.join()
-    running = 0
-    interval = WARNING_ONE_INTERVAL
-    
-def beep_setup(pin=BUZZER_PIN_DEFAULT):
-    setup(pin)
+    if active == 0:
+        running = 0
+    else: 
+        running = 1
+        interval = intvl
 
 if __name__ == "__main__":
     beep_setup()
-    beep_launch()
     while True:
         user_text = input("off?\n")
         if user_text.lower() == "1":
@@ -83,6 +89,6 @@ if __name__ == "__main__":
         elif user_text.lower() == "3":
             interval = WARNING_THREE_INTERVAL
         else:
-            beep_turn_off()
+            destroy()
             break
     
