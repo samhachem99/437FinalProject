@@ -12,8 +12,9 @@ BUZZER_PIN_DEFAULT = "D0"
 
 pin: fc.Pin = None
 buzzer_running = True
+interval = WARNING_ZERO_INTERVAL
 
-user_thread: Thread = None
+beep_thread: Thread = None
 
 def setup(pin_val):
     global pin
@@ -45,24 +46,27 @@ def destroy():
     off()
     GPIO.cleanup()
 
-def launch(interval=WARNING_ONE_INTERVAL):
+def beep_thread_handler():
+    global interval
+    
     try:
         loop(interval)
     except KeyboardInterrupt:
         destroy()
-        
-def user_thread_handler():
-    global buzzer_running
+
+def launch(intvl=WARNING_ZERO_INTERVAL):
+    global beep_thread, interval
     
-    user_text = input("off?\n")
-    if user_text.lower() == "y":
-        buzzer_running = False
+    interval = intvl
+    beep_thread = Thread(target=beep_thread_handler)
+    beep_thread.start()
 
 if __name__ == "__main__":
     setup(BUZZER_PIN_DEFAULT)
-    user_thread = Thread(target=user_thread_handler)
-    user_thread.start()
     launch()
+    user_text = input("off?\n")
+    if user_text.lower() == "y":
+        buzzer_running = False
         
 
     
