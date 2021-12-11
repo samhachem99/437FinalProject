@@ -54,9 +54,9 @@ def ultra_handler():
             buzzer.beep_control(WARNING_TWO_INTERVAL)
         elif 4 <= ultra_status <= 10: 
             buzzer.beep_control(WARNING_THREE_INTERVAL)
-        elif ultra_status < 4:
+        elif 0 <= ultra_status < 4:
             buzzer.beep_control(buzzer.WARNING_FOUR_INTERVAL)
-        elif ultra_status >= 30 or ultra_status == -2:
+        elif ultra_status >= 30 or ultra_status < 0:
             buzzer.beep_control(WARNING_ONE_INTERVAL, active=0)
         sleep(0.5)
         
