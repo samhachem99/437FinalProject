@@ -53,8 +53,7 @@ def ultra_handler():
             buzzer.beep_control(WARNING_THREE_INTERVAL)
         elif ultra_status > 50 or ultra_status == -2:
             print("buzzer sleeping")
-            buzzer.running = 0
-            # buzzer.beep_control(WARNING_ONE_INTERVAL, active=0)
+            buzzer.beep_control(WARNING_ONE_INTERVAL, active=0)
         sleep(0.5)
 
 def fire_up_thread():
