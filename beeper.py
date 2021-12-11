@@ -54,7 +54,7 @@ def launch(interval=WARNING_ONE_INTERVAL):
 def user_thread_handler():
     global buzzer_running
     
-    user_text = input("off?")
+    user_text = input("off?\n")
     if user_text.lower() == "y":
         buzzer_running = False
 
