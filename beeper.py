@@ -10,6 +10,7 @@ WARNING_THREE_INTERVAL = 0.13
 buzzer_pin = "D0"
 
 pin: fc.Pin = None
+buzzer_running = True
 
 def setup(pin_val):
     global pin
@@ -31,7 +32,9 @@ def beep(x):
     time.sleep(x)
     
 def loop(x):
-    while True:
+    global buzzer_running
+    
+    while buzzer_running:
         beep(x)
         
 def destroy():
@@ -47,6 +50,9 @@ def launch():
         
 if __name__ == "__main__":
     launch()
+    user_text = input("off?")
+    if user_text.lower() == "y":
+        buzzer_running = False
         
 
     
