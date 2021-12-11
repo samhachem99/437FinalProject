@@ -56,8 +56,11 @@ def launch(intvl=WARNING_ZERO_INTERVAL):
     global beep_thread, interval
     
     interval = intvl
+    print("about to create thread")
     beep_thread = Thread(target=beep_thread_handler)
+    print("thread has been created")
     beep_thread.start()
+    print("thread has started")
 
 if __name__ == "__main__":
     setup(BUZZER_PIN_DEFAULT)
