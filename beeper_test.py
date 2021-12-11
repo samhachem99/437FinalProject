@@ -1,7 +1,11 @@
 import RPi.GPIO as GPIO
 import time
 
-buzzer = 26  
+buzzer = 26
+
+WARNING_ONE_INTERVAL = 0.5 
+WARNING_TWO_INTERVAL = 0.25
+WARNING_THREE_INTERVAL = 0.13
 
 def setup(pin):
     global buzzerPin 
@@ -34,6 +38,6 @@ def destroy():
 if __name__ == "__main__":
     setup(buzzer)
     try:
-        loop(0.5)
+        loop(WARNING_THREE_INTERVAL)
     except KeyboardInterrupt:
         destroy()
