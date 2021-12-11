@@ -39,6 +39,7 @@ def loop(x):
     
     while buzzer_running:
         beep(x)
+    destroy()
         
 def destroy():
     off()
@@ -56,10 +57,12 @@ def user_thread_handler():
     user_text = input("off?")
     if user_text.lower() == "y":
         buzzer_running = False
+        destroy()
 
 if __name__ == "__main__":
     setup(BUZZER_PIN_DEFAULT)
     user_thread = Thread(target=user_thread_handler)
+    user_thread.start()
     launch()
         
 
