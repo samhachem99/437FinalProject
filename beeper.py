@@ -80,7 +80,7 @@ def beep_control(intvl, active=1):
 
 if __name__ == "__main__":
     beep_setup()
-    off()
+    on()
     time.sleep(1)
     destroy()
     # while True:
