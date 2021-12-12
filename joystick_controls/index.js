@@ -35,9 +35,7 @@ function sendStopCommand() {
 }
 
 function sendSpeedData(val) {
-    console.log(val)
     str = "POWER " + val
-    console.log(str)
     client(str);
 }
 
@@ -97,31 +95,32 @@ function processServerData(data) {
 // for detecting which key is been pressed w,a,s,d
 function updateKey(e) {
     e = e || window.event;
-    if (e.keyCode == '87') {
+    char_val = parseInt(e.keyCode)
+    if (char_val == 87) {
         // up (w)
         document.getElementById("upArrow").style.color = "green";
         sendMoveForwardCommand();
-    } else if (e.keyCode == '83') {
+    } else if (char_val == 83) {
         // down (s)
         document.getElementById("downArrow").style.color = "green";
         sendMoveBackwardCommand();
-    } else if (e.keyCode == '65') {
+    } else if (char_val == 65) {
         // left (a)
         document.getElementById("leftArrow").style.color = "green";
         sendMoveLeftCommand();
-    } else if (e.keyCode == '68') {
+    } else if (char_val == 68) {
         // right (d)
         document.getElementById("rightArrow").style.color = "green";
         sendMoveRightCommand();
-    } else if (e.keyCode == '81') {
+    } else if (char_val == 81) {
         // stop (e)
         sendStopCommand();
-    } else if (e.keyCode >= '48') {
-        val = parseInt(e.keyCode) - 48
+    } else if (char_val >= 48 && char_val <= 57) {
+        val = (char_val - 48)*10
         if (val == 0) {
-            val = 10
+            val = 100
         }
-        sendSpeedData((val*10).toString())
+        sendSpeedData(val.toString())
     }
 }
 
