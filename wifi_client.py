@@ -56,5 +56,3 @@ if __name__ == "__main__":
             break
         process_request(user_text)
     client.close()
-    
-

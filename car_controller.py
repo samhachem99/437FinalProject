@@ -86,13 +86,16 @@ def motor_handler():
     global motor_command_queue
 
     while threads_running:
-        if (len(motor_command_queue) > 0):
-            item = motor_command_queue[0]
-            command = item[0]
-            duration = item[1]
-            power = item[2]
-            motor_command(command, duration, power)
-            motor_command_queue.pop(0)
+        try:
+            if (len(motor_command_queue) > 0):
+                item = motor_command_queue[0]
+                command = item[0]
+                duration = item[1]
+                power = item[2]
+                motor_command(command, duration, power)
+                motor_command_queue.pop(0)
+        except Exception as e:
+            print(e)
     
 
 # The thread responsible for collision detection
