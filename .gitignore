@@ -1,2 +1,2 @@
-/picar_stuff
-__pycache__/
+picar_stuff/
+**/__pycache__/
