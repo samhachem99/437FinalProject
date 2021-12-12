@@ -17,25 +17,6 @@ interval = BEEP_INTERVAL_LONG
 
 beep_thread: Thread = None
 
-# class Beeper():
-#     def __init__(self, pin_val=BUZZER_PIN_DEFAULT, interval=BEEP_INTERVAL_LONG):
-#         self.is_beeping = False
-#         self.pin = fc.Pin(pin_val)
-#         self.interval = interval
-    
-#     def play_beep_sound():
-#         pin.value(GPIO.HIGH)
-    
-#     def stop_beep_sound():
-#         pin.value(GPIO.HIGH)
-    
-#     def play_beep_sequence_for_duration(duration):
-#         play_beep_sound()
-#         if duration != BEEP_INTERVAL_CONTINUOUS:
-#             time.sleep(duration)
-#             stop_beep_sound()
-#             time.sleep(duration)
-
 def play_beep_sound():
     global pin
     pin.value(GPIO.HIGH)
