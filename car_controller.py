@@ -152,3 +152,11 @@ def issue_command(command: str, input: str=""):
             power_val = float(input)
         except Exception as e:
             print(e)
+
+
+if __name__ == "__main__":
+    setup_threads()
+    issue_command("LEFT", "0.1")
+    issue_command("RIGHT", "0.1")
+    issue_command("STOP", "0.1")
+    issue_command("LEFT", "0.1")
