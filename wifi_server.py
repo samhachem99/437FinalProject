@@ -1,21 +1,24 @@
 import socket
-from beeper_test import WARNING_ONE_INTERVAL, WARNING_THREE_INTERVAL, WARNING_TWO_INTERVAL
-import picar_4wd as fc
+from beeper import *
+import picar_stuff.picar_4wd as fc
 import json
 from time import *
 from threading import *
-import beeper as buzzer
 
 FROWARD = "FORWARD"
 BACKWARD = "BACKWARD"
 LEFT = "LEFT"
 RIGHT = "RIGHT"
 STOP = "STOP"
+
 SPEEDUP = "SPEEDUP"
 SPEEDDOWN = "SPEEDDOWN"
+
 UPDATE = "UPDATE"
+
 HOST = "192.168.1.147" # IP address of your Raspberry PI
 PORT = 65432          # Port to listen on (non-privileged ports are > 1023)
+
 current_command = STOP
 power_val = 50
 distance_covered = 0.0
@@ -51,15 +54,15 @@ def ultra_handler():
         print("ultra reading: {}".format(ultra_status))
         if i % 5:
             if 30 <= ultra_status < 40:
-                buzzer.beep_control(WARNING_ONE_INTERVAL)
+                set_beep_state(BEEP_INTERVAL_LONG)
             elif 20 <= ultra_status < 30:
-                buzzer.beep_control(WARNING_TWO_INTERVAL)
+                set_beep_state(BEEP_INTERVAL_MEDIUM)
             elif 10 <= ultra_status < 20: 
-                buzzer.beep_control(WARNING_THREE_INTERVAL)
+                set_beep_state(BEEP_INTERVAL_SHORT)
             elif 0 <= ultra_status < 10:
-                buzzer.beep_control(buzzer.WARNING_FOUR_INTERVAL)
+                set_beep_state(BEEP_INTERVAL_CONTINUOUS)
             elif ultra_status >= 40 or ultra_status < 0:
-                buzzer.beep_control(WARNING_ONE_INTERVAL, active=0)
+                set_beep_state(BEEP_INTERVAL_LONG, active=0)
         i += 1
         sleep(1)
         
@@ -162,11 +165,11 @@ def run_server():
                 print(e)
         client.close()
         s.close()
-        buzzer.destroy()
+        beep_thread_cleanup()
 
 def stop_thread():
     global running 
-    buzzer.destroy()
+    beep_thread_cleanup()
     
     fc.left_rear_speed.deinit()
     fc.right_rear_speed.deinit()
@@ -176,7 +179,7 @@ def stop_thread():
     running = 0
 
 if __name__ == "__main__":
-    buzzer.beep_setup()
+    beep_setup()
     fire_up_thread()
     run_server()
     stop_thread()
