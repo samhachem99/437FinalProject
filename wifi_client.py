@@ -1,4 +1,6 @@
 import socket
+import serial
+import time
 
 FROWARD = "FORWARD"
 BACKWARD = "BACKWARD"
@@ -47,12 +49,20 @@ def process_request(message: str):
         send_request(STOP)
 
 if __name__ == "__main__":
-    setup(CLIENT_HOST, CLIENT_PORT)
+    # setup(CLIENT_HOST, CLIENT_PORT)
     
-    while True:
-        user_text = input("what to send?\n")
-        if user_text == "qq":
-            send_request(STOP)
-            break
-        process_request(user_text)
-    client.close()
+    arduino = serial.Serial(port='/dev/tty.usbmodem142301', baudrate=115200, timeout=.1)
+    
+    try: 
+        while True:
+            value = arduino.readline()
+            print(value)
+            try: 
+                [x, y] = value.decode("utf-8").split(',')
+                print(x, y)
+                process_request()
+            except: 
+                print("not a point")
+            time.sleep(1)
+    except:
+        client.close()
