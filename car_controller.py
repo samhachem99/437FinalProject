@@ -144,7 +144,7 @@ def issue_command(command: str, input: str=""):
             if (duration >= 0.0):
                 motor_command_queue.append((command, duration, power_val))
             else:
-                motor_command_queue = []
+                motor_command_queue.clear()
                 motor_move_state = command
                 motor_command(command, duration, power_val)
         except Exception as e:
