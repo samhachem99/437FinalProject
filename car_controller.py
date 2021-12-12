@@ -2,7 +2,6 @@ from time import *
 from threading import *
 from beeper import *
 import picar_stuff.picar_4wd as fc
-import sys
 
 # commands acceptable
 FORWARD = "FORWARD"
@@ -117,7 +116,8 @@ def setup_threads():
 
 def stop_treads():
     global threads_running 
-    
+
+    threads_running = False
     beep_thread_cleanup()
     
     fc.left_rear_speed.deinit()
@@ -126,11 +126,10 @@ def stop_treads():
     ultrasonic_thread.join()
     collision_detector_thread.join()
     motor_thread.join()
-    
-    threads_running = 0
+
 
 def issue_command(command: str, input: str=""):
-    global motor_thread, motor_command_queue, power_val
+    global motor_thread, motor_command_queue, power_val, motor_move_state
 
     if command in MOTOR_COMMANDS:
         try:
