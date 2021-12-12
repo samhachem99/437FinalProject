@@ -9,7 +9,7 @@ BACKWARD = "BACKWARD"
 LEFT = "LEFT"
 RIGHT = "RIGHT"
 STOP = "STOP"
-MOTOR_COMMANDS = [FORWARD, BACKWARD, LEFT, RIGHT, STOP]
+MOTOR_DIRECTION_COMMANDS = [FORWARD, BACKWARD, LEFT, RIGHT, STOP]
 POWER = "POWER"
 
 # For the motor thread
@@ -134,7 +134,7 @@ def issue_command(command: str, input: str=""):
     global motor_thread, motor_command_queue, power_val, motor_move_state
     print("car_controller received: " + command + ", " + input)
 
-    if command in MOTOR_COMMANDS:
+    if command in MOTOR_DIRECTION_COMMANDS:
         try:
             duration = float(input)
 

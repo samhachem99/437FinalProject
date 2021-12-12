@@ -2,6 +2,7 @@ import socket
 from beeper import *
 from time import *
 from threading import *
+from car_controller import MOTOR_DIRECTION_COMMANDS
 
 UPDATE = "UPDATE"
 
@@ -38,7 +39,13 @@ def wifi_thread_handler():
                 data = client.recv(1024)
                 data = data.decode("utf-8")
                 print("From {}: {}".format(clientInfo[0], data))
-                car_controller_obj.issue_command(data, "-1.0")
+                if (data in MOTOR_DIRECTION_COMMANDS):
+                    # this is a motor command
+                    car_controller_obj.issue_command(data, "-1.0")
+                else:
+                    # This is a command with two inputs
+                    new_data = data.split()
+                    car_controller_obj.issue_command(new_data[0], new_data[1])
             except Exception as e:
                 print(e)
         client.close()

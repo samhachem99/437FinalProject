@@ -57,33 +57,6 @@ class Beeper():
             self.disable_beeper()
         except KeyboardInterrupt:
             self.disable_beeper()
-        
-# def beep_thread_cleanup():
-#     global beep_thread, beeper_obj, beep_thread_active
-    
-#     beep_thread_active = False
-#     beep_thread.join()
-#     beeper_obj.disable_beeper()
-
-# def beep_thread_handler():
-#     global beep_thread_active
-
-#     try:
-#         while beep_thread_active:
-#             if beeper_obj.is_beeping:
-#                 beeper_obj.play_beep_sequence()
-#             else:
-#                 beeper_obj.stop_beep_sound()
-#         beep_thread_cleanup()
-#     except KeyboardInterrupt:
-#         beep_thread_cleanup()
-    
-# def beep_setup(pin_val=BUZZER_PIN_DEFAULT, intvl=BEEP_INTERVAL_LONG):
-#     global beep_thread, beeper_obj
-    
-#     beeper_obj = Beeper()
-#     beep_thread = Thread(target=beep_thread_handler)
-#     beep_thread.start()
 
 if __name__ == "__main__":
     beeper_obj = Beeper()
