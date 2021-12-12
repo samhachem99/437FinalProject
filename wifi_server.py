@@ -38,7 +38,6 @@ def wifi_thread_handler():
                 data = client.recv(1024)
                 data = data.decode("utf-8")
                 print("From {}: {}".format(clientInfo[0], data))
-                print("command to be issued: ", data, "-1.0")
                 car_controller_obj.issue_command(data, "-1.0")
             except Exception as e:
                 print(e)

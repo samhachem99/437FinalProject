@@ -36,7 +36,7 @@ def ultrasonic_handler():
     while threads_running:
         ultrasonic_reading = fc.get_distance_at(0)
         # print("ultra reading: {}".format(ultrasonic_reading))
-        if i % 20:
+        if i % 500:
             if 20 <= ultrasonic_reading < 30:
                 beeper_obj.set_beep_state(BEEP_INTERVAL_LONG)
             elif 10 <= ultrasonic_reading < 20: 
@@ -132,6 +132,7 @@ def stop_treads():
 
 def issue_command(command: str, input: str=""):
     global motor_thread, motor_command_queue, power_val, motor_move_state
+    print("car_controller received: " + command + ", " + input)
 
     if command in MOTOR_COMMANDS:
         try:
