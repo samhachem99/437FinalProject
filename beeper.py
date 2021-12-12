@@ -17,79 +17,92 @@ interval = BEEP_INTERVAL_LONG
 
 beep_thread: Thread = None
 
-class Beeper():
-    def __init__(self, pin_val=BUZZER_PIN_DEFAULT, interval=BEEP_INTERVAL_LONG):
-        self.is_beeping = False
-        self.pin = fc.Pin(pin_val)
-        self.interval = interval
+# class Beeper():
+#     def __init__(self, pin_val=BUZZER_PIN_DEFAULT, interval=BEEP_INTERVAL_LONG):
+#         self.is_beeping = False
+#         self.pin = fc.Pin(pin_val)
+#         self.interval = interval
     
-    def play_beep_sound(self):
-        self.pin.value(GPIO.HIGH)
+#     def play_beep_sound():
+#         pin.value(GPIO.HIGH)
     
-    def stop_beep_sound(self):
-        self.pin.value(GPIO.HIGH)
+#     def stop_beep_sound():
+#         pin.value(GPIO.HIGH)
     
-    def play_beep_sequence(self):
-        self.play_beep_sound()
-        if self.interval != BEEP_INTERVAL_CONTINUOUS:
-            time.sleep(self.interval)
-            self.stop_beep_sound()
-            time.sleep(self.interval)
-    
-    def set_beep_state(self, intvl, active=1):
-        self.is_beeping = active
-        self.interval = intvl
+#     def play_beep_sequence_for_duration(duration):
+#         play_beep_sound()
+#         if duration != BEEP_INTERVAL_CONTINUOUS:
+#             time.sleep(duration)
+#             stop_beep_sound()
+#             time.sleep(duration)
 
-    def disable_beeper(self):
-        self.stop_beep_sound()
-        GPIO.cleanup()
-        self.is_beeping = False
-        self.pin = None
-        self.interval = BEEP_INTERVAL_CONTINUOUS
-
-beeper_obj: Beeper = None
+def play_beep_sound():
+    global pin
+    pin.value(GPIO.HIGH)
+    
+def stop_beep_sound():
+    global pin
+    pin.value(GPIO.LOW)
+    
+def play_beep_sequence_for_duration(duration):
+    play_beep_sound()
+    if duration != BEEP_INTERVAL_CONTINUOUS:
+        time.sleep(duration)
+        stop_beep_sound()
+        time.sleep(duration)
         
 def beep_thread_cleanup():
-    global beep_thread, beeper_obj, beep_thread_active
+    global beep_thread, interval, beep_thread_active, is_beeping
     
+    stop_beep_sound()
+    GPIO.cleanup()
     beep_thread_active = False
     beep_thread.join()
-    beeper_obj.disable_beeper()
+    is_beeping = 0
+    interval = BEEP_INTERVAL_LONG
 
 def beep_thread_handler():
-    global beep_thread_active
+    global beep_thread_active, interval, is_beeping
 
     try:
         while beep_thread_active:
-            if beeper_obj.is_beeping:
-                beeper_obj.play_beep_sequence()
+            if is_beeping:
+                play_beep_sequence_for_duration(interval)
             else:
-                beeper_obj.stop_beep_sound()
+                stop_beep_sound()
         beep_thread_cleanup()
     except KeyboardInterrupt:
         beep_thread_cleanup()
     
 def beep_setup(pin_val=BUZZER_PIN_DEFAULT, intvl=BEEP_INTERVAL_LONG):
-    global beep_thread, beeper_obj
+    global beep_thread, interval, is_beeping, pin
     
-    beeper_obj = Beeper()
+    pin = fc.Pin(pin_val)
+    interval = intvl
+    is_beeping = 0
     beep_thread = Thread(target=beep_thread_handler)
     beep_thread.start()
+
+def set_beep_state(intvl, active=1):
+    global interval, is_beeping
+    
+    is_beeping = active
+    interval = intvl
 
 if __name__ == "__main__":
     beep_setup()
     while True:
         user_text = input("off?\n")
         if user_text.lower() == "1":
-            beeper_obj.set_beep_state(BEEP_INTERVAL_LONG)
+            set_beep_state(BEEP_INTERVAL_LONG)
         elif user_text.lower() == "2":
-            beeper_obj.set_beep_state(BEEP_INTERVAL_MEDIUM)
+            set_beep_state(BEEP_INTERVAL_MEDIUM)
         elif user_text.lower() == "3":
-            beeper_obj.set_beep_state(BEEP_INTERVAL_SHORT)
+            set_beep_state(BEEP_INTERVAL_SHORT)
         elif user_text.lower() == "4":
-            beeper_obj.set_beep_state(BEEP_INTERVAL_CONTINUOUS)
+            set_beep_state(BEEP_INTERVAL_CONTINUOUS)
         elif user_text.lower() == "u":
-            beeper_obj.set_beep_state(BEEP_INTERVAL_LONG, active=0)
+            set_beep_state(BEEP_INTERVAL_LONG, active=0)
         else:
             beep_thread_cleanup()
             break
