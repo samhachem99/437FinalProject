@@ -14,6 +14,7 @@ COMMANDS_CONSTS = [FROWARD, BACKWARD, LEFT, RIGHT]
 FILE_NAME = "commands.txt"
 
 power_val = 50
+car_controller = None
 
 # Thread active flags
 file_listener_active = False
@@ -48,8 +49,10 @@ def get_file_data(fd):
     fd.truncate(0)
     return data
 
-def setup_file_listener_thread():
-    global file_listener_active, file_listener_thread
+def setup_file_listener_thread(_car_controller):
+    global file_listener_active, file_listener_thread, car_controller
+
+    car_controller = _car_controller
 
     file_listener_thread = Thread(target=file_listener_thread_handler)
     file_listener_active = True
@@ -62,6 +65,8 @@ def file_listener_thread_cleanup():
     file_listener_thread.join()
 
 def file_listener_thread_handler():
+    global car_controller
+
     print("Listening for file: {}".format(FILE_NAME))
     while file_listener_active:
         fd = open(FILE_NAME, "r+")
@@ -71,7 +76,7 @@ def file_listener_thread_handler():
             for command in commands_list:
                 try: 
                     cmd_duration = command.strip().split(' ')
-                    process_data(cmd_duration[0].upper(), float(cmd_duration[1]))
+                    car_controller.issue_command(cmd_duration[0].upper(), cmd_duration[1])
                 except:
                     continue
         fd.close()
