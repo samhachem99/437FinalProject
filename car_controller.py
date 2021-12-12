@@ -66,9 +66,9 @@ def motor_command(command, duration, _power_val):
     elif command == STOP:
         fc.stop()
     
-    if (duration != -1):
+    if (duration >= 0.0):
         sleep(duration)
-    stopCar()
+        stopCar()
 
 def stopCar():
     global motor_move_state
