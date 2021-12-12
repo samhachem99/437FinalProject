@@ -156,7 +156,7 @@ def issue_command(command: str, input: str=""):
 
 if __name__ == "__main__":
     setup_threads()
-    issue_command("LEFT", "0.1")
-    issue_command("RIGHT", "0.1")
-    issue_command("STOP", "0.1")
-    issue_command("LEFT", "0.1")
+    issue_command("LEFT", "1.0")
+    issue_command("RIGHT", "1.0")
+    issue_command("STOP", "1.0")
+    issue_command("LEFT", "1.0")
