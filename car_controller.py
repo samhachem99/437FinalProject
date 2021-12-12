@@ -30,25 +30,23 @@ collision_detector_thread: Thread = None
 beeper_obj: Beeper = None
 
 def ultrasonic_handler():
-    global threads_running, ultrasonic_reading, beeper_obj
+    global threads_running, ultrasonic_reading, beeper_obj, motor_move_state
     
     i = 0
     while threads_running:
         ultrasonic_reading = fc.get_distance_at(0)
-        print("ultra reading: {}".format(ultrasonic_reading))
-        if i % 5:
-            if 30 <= ultrasonic_reading < 40:
+        # print("ultra reading: {}".format(ultrasonic_reading))
+        if i % 20 and motor_move_state == FORWARD:
+            if 20 <= ultrasonic_reading < 30:
                 beeper_obj.set_beep_state(BEEP_INTERVAL_LONG)
-            elif 20 <= ultrasonic_reading < 30:
-                beeper_obj.set_beep_state(BEEP_INTERVAL_MEDIUM)
             elif 10 <= ultrasonic_reading < 20: 
                 beeper_obj.set_beep_state(BEEP_INTERVAL_SHORT)
             elif 0 <= ultrasonic_reading < 10:
                 beeper_obj.set_beep_state(BEEP_INTERVAL_CONTINUOUS)
-            elif ultrasonic_reading >= 40 or ultrasonic_reading < 0:
+            elif ultrasonic_reading >= 30 or ultrasonic_reading < 0:
                 beeper_obj.set_beep_state(BEEP_INTERVAL_LONG, active=0)
         i += 1
-        sleep(1)
+        sleep(0.01)
 
 # Moves the car in a certain direction for a determined duration
 # after which the car stops
