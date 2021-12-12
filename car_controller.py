@@ -17,7 +17,7 @@ power_val = 50
 motor_command_queue = []
 motor_move_state = STOP
 motor_active_duration = -1
-WALL_DISTANCE_THRESHOLD = 10
+WALL_DISTANCE_THRESHOLD = 20
 
 # For the ultrasonic thread
 ultrasonic_reading = -1
@@ -104,25 +104,24 @@ def collision_detector_handler():
             stopCar()
 
 def setup_threads():
-    global ultrasonic_thread, motor_thread, collision_detector_thread, beeper_obj
+    global ultrasonic_thread, motor_thread, collision_detector_thread, beeper_obj, threads_running
 
     fc.start_speed_thread()
-
+    threads_running = True
     beeper_obj = Beeper()
 
     ultrasonic_thread = Thread(target=ultrasonic_handler)
-    # collision_detector_thread = Thread(target=collision_detector_handler)
-    # motor_thread = Thread(target=motor_handler)
+    collision_detector_thread = Thread(target=collision_detector_handler)
+    motor_thread = Thread(target=motor_handler)
     
     ultrasonic_thread.start()
-    # collision_detector_thread.start()
-    # motor_thread.start()
+    collision_detector_thread.start()
+    motor_thread.start()
 
 def stop_treads():
     global threads_running, beeper_obj
 
     threads_running = False
-    beeper_obj = None
     
     fc.left_rear_speed.deinit()
     fc.right_rear_speed.deinit()
@@ -130,24 +129,25 @@ def stop_treads():
     ultrasonic_thread.join()
     collision_detector_thread.join()
     motor_thread.join()
+    
+    beeper_obj = None
 
 def issue_command(command: str, input: str=""):
     global motor_thread, motor_command_queue, power_val, motor_move_state
 
     if command in MOTOR_COMMANDS:
         try:
-            if (motor_thread == None):
-                duration = float(input)
+            duration = float(input)
 
-                # If the duration is more than 0, the command should be queued.
-                # If it is less than 0, the command should interrupt the motor_command_queue
-                # and be executed immediately
-                if (duration >= 0.0):
-                    motor_command_queue.append((command, duration, power_val))
-                else:
-                    motor_command_queue = []
-                    motor_move_state = command
-                    motor_command(command, duration, power_val)
+            # If the duration is more than 0, the command should be queued.
+            # If it is less than 0, the command should interrupt the motor_command_queue
+            # and be executed immediately
+            if (duration >= 0.0):
+                motor_command_queue.append((command, duration, power_val))
+            else:
+                motor_command_queue = []
+                motor_move_state = command
+                motor_command(command, duration, power_val)
         except Exception as e:
             print(e)
     elif command == POWER:
@@ -156,10 +156,10 @@ def issue_command(command: str, input: str=""):
         except Exception as e:
             print(e)
 
-
+# For testing purposes
 if __name__ == "__main__":
     setup_threads()
-    # issue_command("LEFT", "1.0")
-    # issue_command("RIGHT", "1.0")
-    # issue_command("STOP", "1.0")
-    # issue_command("LEFT", "1.0")
+    issue_command("LEFT", "1.0")
+    issue_command("RIGHT", "1.0")
+    issue_command("STOP", "1.0")
+    issue_command("LEFT", "1.0")
