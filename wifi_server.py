@@ -1,7 +1,5 @@
 import socket
 from beeper import *
-import picar_stuff.picar_4wd as fc
-import json
 from time import *
 from threading import *
 
