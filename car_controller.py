@@ -143,6 +143,7 @@ def issue_command(command: str, input: str=""):
             # and be executed immediately
             if (duration >= 0.0):
                 motor_command_queue.append((command, duration, power_val))
+                print(id(motor_command_queue), motor_command_queue)
             else:
                 motor_command_queue.clear()
                 motor_move_state = command
