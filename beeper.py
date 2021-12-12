@@ -72,20 +72,19 @@ def set_beep_state(intvl, active=1):
 
 if __name__ == "__main__":
     beep_setup()
-    # while True:
-    #     user_text = input("off?\n")
-    #     if user_text.lower() == "1":
-    #         set_beep_state(BEEP_INTERVAL_LONG)
-    #     elif user_text.lower() == "2":
-    #         set_beep_state(BEEP_INTERVAL_MEDIUM)
-    #     elif user_text.lower() == "3":
-    #         set_beep_state(BEEP_INTERVAL_SHORT)
-    #     elif user_text.lower() == "4":
-    #         set_beep_state(BEEP_INTERVAL_CONTINUOUS)
-    #     elif user_text.lower() == "u":
-    #         set_beep_state(BEEP_INTERVAL_LONG, active=0)
-    #     else:
-    #         beep_thread_cleanup()
-    #         break
-    GPIO.cleanup()
+    while True:
+        user_text = input("off?\n")
+        if user_text.lower() == "1":
+            set_beep_state(BEEP_INTERVAL_LONG)
+        elif user_text.lower() == "2":
+            set_beep_state(BEEP_INTERVAL_MEDIUM)
+        elif user_text.lower() == "3":
+            set_beep_state(BEEP_INTERVAL_SHORT)
+        elif user_text.lower() == "4":
+            set_beep_state(BEEP_INTERVAL_CONTINUOUS)
+        elif user_text.lower() == "u":
+            set_beep_state(BEEP_INTERVAL_LONG, active=0)
+        else:
+            beep_thread_cleanup()
+            break
     
