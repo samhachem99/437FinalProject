@@ -22,12 +22,12 @@ class Beeper():
         self.is_beeping = False
         self.pin = fc.Pin(pin_val)
         self.interval = interval
-        self.beep_thread = Thread(target=beep_thread_handler)
+        self.beep_thread = Thread(target=self.beep_thread_handler)
         self.beep_thread_active = True
         self.beep_thread.start()
     
     def play_beep_sound(self):
-        self.pin.value(GPIO.HIGH)
+        self.pin.value(GPIO.LOW)
     
     def stop_beep_sound(self):
         self.pin.value(GPIO.HIGH)
@@ -92,20 +92,26 @@ beeper_obj: Beeper = None
 #     beep_thread = Thread(target=beep_thread_handler)
 #     beep_thread.start()
 
+def set_beep_state(intvl, active=1):
+    global interval, is_beeping
+    
+    is_beeping = active
+    interval = intvl
+
 if __name__ == "__main__":
     beeper_obj = Beeper()
     while True:
         user_text = input("off?\n")
         if user_text.lower() == "1":
-            beeper_obj.set_beep_state(BEEP_INTERVAL_LONG)
+            set_beep_state(BEEP_INTERVAL_LONG)
         elif user_text.lower() == "2":
-            beeper_obj.set_beep_state(BEEP_INTERVAL_MEDIUM)
+            set_beep_state(BEEP_INTERVAL_MEDIUM)
         elif user_text.lower() == "3":
-            beeper_obj.set_beep_state(BEEP_INTERVAL_SHORT)
+            set_beep_state(BEEP_INTERVAL_SHORT)
         elif user_text.lower() == "4":
-            beeper_obj.set_beep_state(BEEP_INTERVAL_CONTINUOUS)
+            set_beep_state(BEEP_INTERVAL_CONTINUOUS)
         elif user_text.lower() == "u":
-            beeper_obj.set_beep_state(BEEP_INTERVAL_LONG, active=0)
+            set_beep_state(BEEP_INTERVAL_LONG, active=0)
         else:
             beeper_obj.disable_beeper()
             break
