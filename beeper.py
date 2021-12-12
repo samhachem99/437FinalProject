@@ -10,11 +10,6 @@ BEEP_INTERVAL_CONTINUOUS = 0.0
 
 BUZZER_PIN_DEFAULT = "D0"
 
-is_beeping = 0
-pin: fc.Pin = None
-beep_thread_active = True
-interval = BEEP_INTERVAL_LONG
-
 beep_thread: Thread = None
 
 class Beeper():
@@ -62,8 +57,6 @@ class Beeper():
             self.disable_beeper()
         except KeyboardInterrupt:
             self.disable_beeper()
-
-beeper_obj: Beeper = None
         
 # def beep_thread_cleanup():
 #     global beep_thread, beeper_obj, beep_thread_active
