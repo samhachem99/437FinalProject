@@ -92,12 +92,6 @@ beeper_obj: Beeper = None
 #     beep_thread = Thread(target=beep_thread_handler)
 #     beep_thread.start()
 
-def set_beep_state(intvl, active=1):
-    global interval, is_beeping
-    
-    is_beeping = active
-    interval = intvl
-
 if __name__ == "__main__":
     beeper_obj = Beeper()
     while True:

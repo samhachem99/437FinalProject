@@ -27,9 +27,10 @@ threads_running = False
 ultrasonic_thread: Thread = None
 motor_thread: Thread = None
 collision_detector_thread: Thread = None
+beeper_obj: Beeper = None
 
 def ultrasonic_handler():
-    global threads_running, ultrasonic_reading
+    global threads_running, ultrasonic_reading, beeper_obj
     
     i = 0
     while threads_running:
@@ -37,15 +38,15 @@ def ultrasonic_handler():
         print("ultra reading: {}".format(ultrasonic_reading))
         if i % 5:
             if 30 <= ultrasonic_reading < 40:
-                set_beep_state(BEEP_INTERVAL_LONG)
+                beeper_obj.set_beep_state(BEEP_INTERVAL_LONG)
             elif 20 <= ultrasonic_reading < 30:
-                set_beep_state(BEEP_INTERVAL_MEDIUM)
+                beeper_obj.set_beep_state(BEEP_INTERVAL_MEDIUM)
             elif 10 <= ultrasonic_reading < 20: 
-                set_beep_state(BEEP_INTERVAL_SHORT)
+                beeper_obj.set_beep_state(BEEP_INTERVAL_SHORT)
             elif 0 <= ultrasonic_reading < 10:
-                set_beep_state(BEEP_INTERVAL_CONTINUOUS)
+                beeper_obj.set_beep_state(BEEP_INTERVAL_CONTINUOUS)
             elif ultrasonic_reading >= 40 or ultrasonic_reading < 0:
-                set_beep_state(BEEP_INTERVAL_LONG, active=0)
+                beeper_obj.set_beep_state(BEEP_INTERVAL_LONG, active=0)
         i += 1
         sleep(1)
 
@@ -103,22 +104,25 @@ def collision_detector_handler():
             stopCar()
 
 def setup_threads():
-    global ultrasonic_thread, motor_thread
+    global ultrasonic_thread, motor_thread, collision_detector_thread, beeper_obj
 
     fc.start_speed_thread()
+
+    beeper_obj = Beeper()
+
     ultrasonic_thread = Thread(target=ultrasonic_handler)
-    collision_detector_thread = Thread(target=collision_detector_handler)
-    motor_thread = Thread(target=motor_handler)
+    # collision_detector_thread = Thread(target=collision_detector_handler)
+    # motor_thread = Thread(target=motor_handler)
     
     ultrasonic_thread.start()
-    collision_detector_thread.start()
-    motor_thread.start()
+    # collision_detector_thread.start()
+    # motor_thread.start()
 
 def stop_treads():
-    global threads_running 
+    global threads_running, beeper_obj
 
     threads_running = False
-    beep_thread_cleanup()
+    beeper_obj = None
     
     fc.left_rear_speed.deinit()
     fc.right_rear_speed.deinit()
@@ -126,7 +130,6 @@ def stop_treads():
     ultrasonic_thread.join()
     collision_detector_thread.join()
     motor_thread.join()
-
 
 def issue_command(command: str, input: str=""):
     global motor_thread, motor_command_queue, power_val, motor_move_state
@@ -156,7 +159,7 @@ def issue_command(command: str, input: str=""):
 
 if __name__ == "__main__":
     setup_threads()
-    issue_command("LEFT", "1.0")
-    issue_command("RIGHT", "1.0")
-    issue_command("STOP", "1.0")
-    issue_command("LEFT", "1.0")
+    # issue_command("LEFT", "1.0")
+    # issue_command("RIGHT", "1.0")
+    # issue_command("STOP", "1.0")
+    # issue_command("LEFT", "1.0")
