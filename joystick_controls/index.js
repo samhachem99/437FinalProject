@@ -6,8 +6,6 @@ const BACKWARD = "BACKWARD"
 const LEFT = "LEFT"
 const RIGHT = "RIGHT"
 const STOP = "STOP"
-const SPEEDUP = "SPEEDUP"
-const SPEEDDOWN = "SPEEDDOWN"
 const UPDATE = "UPDATE"
 const POWER = "POWER"
 
@@ -35,7 +33,7 @@ function sendStopCommand() {
 }
 
 function sendSpeedData(val) {
-    str = "POWER " + val
+    str = POWER + " " + val
     client(str);
 }
 
