@@ -22,10 +22,10 @@ class Beeper():
         self.beep_thread.start()
     
     def play_beep_sound(self):
-        self.pin.value(GPIO.LOW)
+        self.pin.value(GPIO.HIGH)
     
     def stop_beep_sound(self):
-        self.pin.value(GPIO.HIGH)
+        self.pin.value(GPIO.LOW)
     
     def play_beep_sequence(self):
         self.play_beep_sound()
